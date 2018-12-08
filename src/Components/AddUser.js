@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
-class Form extends Component {
+class AddUser extends Component {
   state = {
     name: ''
   }
@@ -10,12 +10,12 @@ class Form extends Component {
       [e.target.name]: e.target.value
     })
   }
-  handleSubmit = async(e) => {
+  handleSubmit = async (e) => {
     e.preventDefault()
-    const { name  } = this.state
+    const { name } = this.state
     console.log(name)
-    await axios.post('/kweens', { name })
-    this.props.refresh()
+    await axios.post('/users', { name })
+    this.props.refresh('users')
     this.setState({
       name: ''
     })
@@ -23,14 +23,14 @@ class Form extends Component {
   render() {
     return (
       <>
-        <h2>Add Queen</h2>
+        <h2>Add a New User</h2>
         <form onSubmit={this.handleSubmit}>
-          <input name="name" type="text" onChange={this.handleChange} value={this.state.name}/>
-          <input type="submit"/>
+          <input name="name" type="text" onChange={this.handleChange} value={this.state.name} />
+          <input type="submit" />
         </form>
       </>
     )
   }
 }
 
-export default Form
+export default AddUser
