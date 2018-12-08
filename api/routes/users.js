@@ -28,6 +28,18 @@ router.post('/', async(req, res, next) => {
   }
 })
 
+router.get('/:user_id', async(req, res, next) => {
+  const {user_id} = req.params
+  try {
+    const doc = await User.findById(user_id)
+    res.status(200).send({
+      data: doc
+    })
+  } catch(e) {
+    next(e)
+  }
+})
+
 router.delete('/:user_id', async(req, res, next) => {
   try {
     const { user_id } = req.params

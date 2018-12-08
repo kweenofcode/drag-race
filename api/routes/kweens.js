@@ -24,4 +24,16 @@ router.post('/', async(req, res, next) => {
   }
 })
 
+router.delete('/:queen_id', async(req, res, next) => {
+  const { queen_id } = req.params
+  try {
+    const doc = await Kween.findByIdAndRemove(queen_id)
+    res.status(204).send({
+      data: [doc]
+    })
+  } catch(e) {
+    next(e)
+  }
+})
+
 module.exports = router;

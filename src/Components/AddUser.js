@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button'
+
 class AddUser extends Component {
   state = {
     name: ''
@@ -15,18 +18,27 @@ class AddUser extends Component {
     const { name } = this.state
     console.log(name)
     await axios.post('/users', { name })
-    this.props.refresh('users')
     this.setState({
       name: ''
     })
+    this.props.history.push('/admin')
   }
   render() {
     return (
       <>
         <h2>Add a New User</h2>
         <form onSubmit={this.handleSubmit}>
-          <input name="name" type="text" onChange={this.handleChange} value={this.state.name} />
-          <input type="submit" />
+          <TextField
+            name="name"
+            label="User's Name"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
+          <Button
+            type="submit"
+          >
+          Add User
+          </Button>
         </form>
       </>
     )

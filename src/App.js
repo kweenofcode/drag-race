@@ -3,10 +3,12 @@ import './App.css';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import axios from 'axios';
 
+import Home from './Components/Home'
 import Admin from './Components/Admin'
 import AddKween from './Components/AddKween'
 import AddUser from './Components/AddUser'
 import AddRule from './Components/AddRule'
+import User from './Components/User'
 
 class App extends Component {
   state = {
@@ -57,7 +59,15 @@ class App extends Component {
       return (
         <Router>
           <div> 
-            <Link to="/admin">Admin</Link>
+            <Route exact path="/" render={(props) => 
+              <Home 
+                {...props} 
+                refresh={this.refresh}
+                users={this.state.users}
+                kweens={this.state.kweens}
+                rules={this.state.rules}  
+              />}
+              />
             <Route path="/admin" render={(props) => 
               <Admin 
                 {...props} 
@@ -72,6 +82,7 @@ class App extends Component {
               <Route path="/add/user" render={(props) => <AddUser {...props} refresh={this.props.refresh} handleChange={this.props.handleChange} />} />
               <Route path="/add/rule" render={(props) => <AddRule {...props} refresh={this.props.refresh} handleChange={this.props.handleChange} />} />
             </Switch>
+            <Route path="/users/:user_id" render={(props) => <User {...props} />} />
           </div>
         </Router>
       )

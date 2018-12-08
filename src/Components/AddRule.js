@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
+import Input from '@material-ui/core/Input';
+import TextField from '@material-ui/core/TextField'
+
 class AddRule extends Component {
   state = {
     body: '',
@@ -17,12 +20,12 @@ class AddRule extends Component {
     try {
       const { body, description, points } = this.state
       await axios.post('/rules', { body, description, points })
-      this.props.refresh('rules')
       this.setState({
         body: '',
         description: '',
         points: 0,
       })
+      this.props.history.push('/admin')
     } catch(e) {
       console.log(e)
     }
@@ -32,13 +35,29 @@ class AddRule extends Component {
       <div>
         <h2>Add A New Rule</h2>
         <form onSubmit={this.handleSubmit}>
-          <label htmlFor="body">Title</label>
-          <input type="text" name='body' onChange={this.handleChange} value={this.state.body} />
-          <label htmlFor="description">Description</label>
-          <input type="text" name='description' onChange={this.handleChange} value={this.state.description} />
-          <label htmlFor="points">Points</label>
-          <input type="number" name='points' onChange={this.handleChange} value={this.state.points} />
-          <input type="submit" value="Add New Rule"/>
+          <TextField
+            name="body"
+            label="Title"
+            value={this.state.body}
+            onChange={this.handleChange}
+          />
+          <TextField
+            name="description"
+            label="Description"
+            value={this.state.description}
+            onChange={this.handleChange}
+          />
+          <TextField
+            name="points"
+            type="number"
+            label="Points"
+            value={this.state.points}
+            onChange={this.handleChange}
+          />
+          <TextField 
+            type="submit"  
+            value="Add Rule"
+          />
         </form>
       </div>
     )
