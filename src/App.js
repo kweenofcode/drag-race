@@ -123,6 +123,7 @@ class App extends Component {
                 render={(props) => 
                   <Kween 
                     {...props} 
+                    kweens={this.state.kweens}
                   />
                 }
               />
