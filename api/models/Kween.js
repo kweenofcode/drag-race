@@ -7,7 +7,7 @@ const kweenSchema = new Schema({
     required: true,
   }, 
   points: {
-    type: [Schema.Types.ObjectId],
+    type: [{ type: Schema.Types.ObjectId, ref: 'Rule'}],
   },
   eliminated: {
     type: Boolean,

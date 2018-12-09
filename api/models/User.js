@@ -6,7 +6,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  kweens: [Schema.Types.ObjectId],
+  kweens: [{ type: Schema.Types.ObjectId, ref: 'Kween' } ],
   score: {
     type: Number,
     default: 0,

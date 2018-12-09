@@ -28,10 +28,23 @@ router.post('/', async(req, res, next) => {
   }
 })
 
+router.put('/:user_id', async(req, res, next) => {
+  try {
+    const { kweens } = req.body
+    const {user_id} = req.params
+    const doc = await User.findByIdAndUpdate(user_id, { kweens } )
+    res.status(200).send({
+      data: [doc]
+    })
+  } catch(e) {
+    next(e)
+  }
+})
+
 router.get('/:user_id', async(req, res, next) => {
   const {user_id} = req.params
   try {
-    const doc = await User.findById(user_id)
+    const doc = await User.findById(user_id).populate('kweens')
     res.status(200).send({
       data: doc
     })

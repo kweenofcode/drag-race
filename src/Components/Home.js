@@ -12,7 +12,18 @@ class Home extends Component {
         <Link to="/admin">Admin</Link>
         <h1>Home</h1>
         <List>
-          {this.props.users.map((user) => <ListItem key={user._id} id={user._id}><Link to={`users/${user._id}`}><ListItemText primary={user.name} secondary={user._id} /></Link></ListItem>)}
+          {this.props.users.map((user) => 
+            <ListItem 
+              key={user._id} 
+              id={user._id}>
+              <Link 
+                to={`users/${user._id}`}>
+                <ListItemText 
+                  primary={user.name} 
+                  secondary={user._id} 
+                />
+              </Link>
+            </ListItem>)}
         </List>
       </div>
     )

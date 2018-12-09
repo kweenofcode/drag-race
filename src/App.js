@@ -19,13 +19,6 @@ class App extends Component {
   refresh = async(collection) => {
     try {
       let { data: { data } } = await axios.get(`/${collection}`)
-      // const randomKweens = []
-      // for (let i = 0; i <= 4; i = i + 1) {
-      //   const randomIndex = Math.floor(Math.random() * data.length)
-      //   randomKweens.push(data[randomIndex])
-      //   console.log(randomKweens)
-      //   data.splice(randomIndex, 1)
-      // }
       this.setState({
         [collection]: data
       })
@@ -82,7 +75,7 @@ class App extends Component {
               <Route path="/add/user" render={(props) => <AddUser {...props} refresh={this.props.refresh} handleChange={this.props.handleChange} />} />
               <Route path="/add/rule" render={(props) => <AddRule {...props} refresh={this.props.refresh} handleChange={this.props.handleChange} />} />
             </Switch>
-            <Route path="/users/:user_id" render={(props) => <User {...props} />} />
+            <Route path="/users/:user_id" render={(props) => <User {...props} users={this.state.users} kweens={this.state.kweens} refresh={this.props.refresh}/>} />
           </div>
         </Router>
       )
