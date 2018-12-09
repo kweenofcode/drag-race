@@ -14,9 +14,11 @@ class Home extends Component {
     users.map((user) => {
       user.score = 0
       user.kweens.forEach((kween) => {
+        kween.score = 0
         kween.points.forEach((rule) => {
-          user.score += Number(rule.points)
+          kween.score += Number(rule.points)
         })
+        user.score += Number(kween.score)
       })
       return user  
     })
@@ -33,22 +35,9 @@ class Home extends Component {
         <Link to="/admin">Admin</Link>
         <h1>Home</h1>
         <List>
-          {this.props.kweens.map((kween) =>
-            <ListItem
-              key={kween._id}
-              id={kween._id}>
-              <Link
-                to={`kweens/${kween._id}`}>
-                <ListItemText
-                  primary={kween.name}
-                />
-              </Link>
-            </ListItem>)}
-        </List>
-        <List>
           {this.props.users
             .filter(user => user.kweens.length === 3)
-            .map((user) => 
+            .map((user) => ( 
             <ListItem 
               key={user._id} 
               id={user._id}>
@@ -56,13 +45,23 @@ class Home extends Component {
                 to={`users/${user._id}`}>
                 <ListItemText 
                   primary={user.name} 
-                  secondary={user._id} 
-                />
-                <ListItemText 
-                  primary={user.score}
+                  secondary={user.score} 
                 />
               </Link>
-            </ListItem>)}
+              </ListItem>
+              user.kweens.map(kween => <ListItem
+                  key={kween._id}
+                    id={kween._id}>
+                    <Link
+                      to={`kweens/${kween._id}`}>
+                      <ListItemText
+                        primary={kween.name}
+                        secondary={kween.score}
+                      />
+                    </Link>
+                </ListItem>
+              )
+            )})
         </List>
       </div>
     )
