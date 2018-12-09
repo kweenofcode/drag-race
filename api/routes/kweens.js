@@ -24,11 +24,24 @@ router.post('/', async(req, res, next) => {
   }
 })
 
-router.delete('/:queen_id', async(req, res, next) => {
-  const { queen_id } = req.params
+router.delete('/:kween_id', async(req, res, next) => {
+  const { kween_id } = req.params
   try {
-    const doc = await Kween.findByIdAndRemove(queen_id)
+    const doc = await Kween.findByIdAndRemove(kween_id)
     res.status(204).send({
+      data: [doc]
+    })
+  } catch(e) {
+    next(e)
+  }
+})
+
+router.put('/:kween_id', async(req, res, next) => {
+  const {kween_id} = req.params
+  const { points } = req.body
+  try {
+    const doc = await Kween.findByIdAndUpdate(kween_id, { points })
+    res.status(201).send({
       data: [doc]
     })
   } catch(e) {

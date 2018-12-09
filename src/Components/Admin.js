@@ -26,30 +26,68 @@ class Admin extends Component {
             <div>
               <h2>Queens</h2>
               <List>
-                {this.props.kweens.map((kween) => <ListItem key={kween._id} id={kween._id}><ListItemText primary={kween.name} /><Button onClick={() => this.props.delete('kweens', kween._id)}>Remove</Button></ListItem>)}
+                {this.props.kweens.map((kween) => 
+                  <ListItem 
+                    key={kween._id}  
+                    id={kween._id}>
+                    <Link to={`/kweens/${kween._id}/rules`}>
+                      <ListItemText 
+                        primary={kween.name} 
+                      />
+                    </Link>
+                    <Button 
+                      onClick={() => this.props.delete('kweens', kween._id)}>
+                      Remove
+                    </Button>
+                  </ListItem>)}
               </List>
             </div>
             <div>
               <h2>Users</h2>
               <List>
-                {this.props.users.map((user) => <ListItem key={user._id} id={user._id}><ListItemText primary={user.name} secondary={user._id} /><Button   onClick={() => this.props.delete('users', user._id)}>Remove</Button></ListItem>)}
+                {this.props.users.map((user) =>
+                  <ListItem 
+                    key={user._id} 
+                    id={user._id}>
+                    <ListItemText 
+                      primary={user.name} 
+                      secondary={user._id} 
+                    />
+                    <Button 
+                      onClick={() => this.props.delete('users', user._id)}>
+                      Remove
+                    </Button>
+                  </ListItem>)}
               </List>
             </div>
           </div>
           <div className="full">          
             <h2>Rules</h2>
             <List>
-              {this.props.rules.map((rule) => <ListItem key={rule._id} id={rule._id}><ListItemText primary={`${rule.body}  ${rule.points}`} secondary={rule.description} />{rule.points}<Button onClick={() => this.props.delete('rules', rule._id)}>Remove</Button></ListItem>)}
+              {this.props.rules.map((rule) => 
+                <ListItem 
+                  key={rule._id} 
+                  id={rule._id}>
+                  <ListItemText 
+                    primary={`${rule.body}  ${rule.points}`} 
+                    secondary={rule.description} 
+                  />
+                  {rule.points}
+                  <Button 
+                    onClick={() => this.props.delete('rules', rule._id)}>
+                    Remove
+                  </Button>
+                </ListItem>)}
             </List>
           </div>
           <div className="navigation">
-            <Link to="/add/queen">
+            <Link to="/kweens/add">
               <Button>Add Queen</Button>
             </Link>
-            <Link to="/add/user">
+            <Link to="/users/add">
               <Button>Add User</Button>
             </Link>
-            <Link to="/add/rule">
+            <Link to="/rules/add">
               <Button>Add Rule</Button>
             </Link>
           </div>

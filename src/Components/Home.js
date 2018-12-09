@@ -6,11 +6,45 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
 class Home extends Component {
+  state = {
+    users: null,
+  }
+  addUpTheTens = () => {
+    const users = this.props.users
+    users.map((user) => {
+      user.score = 0
+      user.kweens.forEach((kween) => {
+        kween.points.forEach((rule) => {
+          user.score += Number(rule.points)
+        })
+      })
+      return user  
+    })
+    this.setState({
+      users
+    })
+  }
+  componentDidMount() {
+    this.addUpTheTens()
+  }
   render(){
     return (
       <div>
         <Link to="/admin">Admin</Link>
         <h1>Home</h1>
+        <List>
+          {this.props.kweens.map((kween) =>
+            <ListItem
+              key={kween._id}
+              id={kween._id}>
+              <Link
+                to={`kweens/${kween._id}`}>
+                <ListItemText
+                  primary={kween.name}
+                />
+              </Link>
+            </ListItem>)}
+        </List>
         <List>
           {this.props.users.map((user) => 
             <ListItem 
@@ -21,6 +55,9 @@ class Home extends Component {
                 <ListItemText 
                   primary={user.name} 
                   secondary={user._id} 
+                />
+                <ListItemText 
+                  primary={user.score}
                 />
               </Link>
             </ListItem>)}
