@@ -29,7 +29,6 @@ class Kween extends Component {
   addUpTheTens = (kween) => {
     kween.score = 0
     kween.points.map((point) => {
-      console.log(point)
       kween.score += Number(point.points)
       return point
     })

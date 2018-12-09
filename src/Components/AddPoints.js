@@ -19,7 +19,7 @@ class AddPoints extends Component {
     const { kween_id } = this.props.match.params
     const { points } = this.state
     try {
-      await axios.put(`/kweens/${kween_id}`, { points })
+      await axios.put(`/kweens/${kween_id}/points`, { points })
       this.props.history.push('/admin')
     } catch(e) {
       console.log(e)

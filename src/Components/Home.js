@@ -46,7 +46,9 @@ class Home extends Component {
             </ListItem>)}
         </List>
         <List>
-          {this.props.users.map((user) => 
+          {this.props.users
+            .filter(user => user.kweens.length === 3)
+            .map((user) => 
             <ListItem 
               key={user._id} 
               id={user._id}>

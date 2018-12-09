@@ -36,7 +36,7 @@ router.delete('/:kween_id', async(req, res, next) => {
   }
 })
 
-router.put('/:kween_id', async(req, res, next) => {
+router.put('/:kween_id/points', async(req, res, next) => {
   const {kween_id} = req.params
   const { points } = req.body
   try {
@@ -45,6 +45,19 @@ router.put('/:kween_id', async(req, res, next) => {
       data: [doc]
     })
   } catch(e) {
+    next(e)
+  }
+})
+
+router.put('/:kween_id/eliminated', async (req, res, next) => {
+  const { kween_id } = req.params
+  const { eliminated } = req.body
+  try {
+    const doc = await Kween.findByIdAndUpdate(kween_id, { eliminated })
+    res.status(201).send({
+      data: [doc]
+    })
+  } catch (e) {
     next(e)
   }
 })
