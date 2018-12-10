@@ -98,7 +98,6 @@ class Admin extends Component {
                     primary={`${rule.body}  ${rule.points}`} 
                     secondary={rule.description} 
                   />
-                  {rule.points}
                   <Button 
                     onClick={() => this.props.delete('rules', rule._id)}>
                     Remove

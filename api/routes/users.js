@@ -17,11 +17,12 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async(req, res, next) => {
   try {
-    const { name } = req.body;
-    const doc = new User({ name })
+    const { name, password } = req.body;
+    const doc = new User({ name, password })
     await doc.save()
+    const { _id } = doc
     res.status(201).send({
-      data: [doc]
+      data: [{ _id, name}]
     })
   } catch(e) {
     next(e)
@@ -41,8 +42,21 @@ router.put('/:user_id', async(req, res, next) => {
   }
 })
 
+router.put('/:user_id/admin', async (req, res, next) => {
+  try {
+    const { admin } = req.body
+    const { user_id } = req.params
+    const doc = await User.findByIdAndUpdate(user_id, { admin })
+    res.status(200).send({
+      data: [doc]
+    })
+  } catch (e) {
+    next(e)
+  }
+})
+
 router.get('/:user_id', async(req, res, next) => {
-  const {user_id} = req.params
+  const {user_id } = req.params
   try {
     const doc = await User.findById(user_id).populate('kweens')
     res.status(200).send({

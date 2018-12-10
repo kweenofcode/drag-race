@@ -11,6 +11,7 @@ import AddRule from './Components/AddRule'
 import User from './Components/User'
 import AddPoints from './Components/AddPoints'
 import Kween from './Components/Kween'
+import Login from './Components/Login'
 
 class App extends Component {
   state = {
@@ -137,6 +138,12 @@ class App extends Component {
                   handleChange={this.props.handleChange} 
                 />
               } 
+            />
+            <Route 
+              path="/login"
+              render={(props) => 
+                <Login {...props} />
+              }
             />
           </div>
         </Router>

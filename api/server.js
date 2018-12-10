@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use('/kweens', require('./routes/kweens'));
 app.use('/rules', require('./routes/rules'))
 app.use('/users', require('./routes/users'))
+app.use('/login', require('./routes/login'))
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
