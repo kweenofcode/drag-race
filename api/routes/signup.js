@@ -1,16 +1,18 @@
 const express = require('express')
 const router = express.Router()
 
+const tokenService = require('../utils/tokenService')
 const User = require('../models/User')
 
 router.post('/', async (req, res, next) => {
   try {
-    const { name, password } = req.body;
+    const { name, password, game } = req.body;
     const doc = new User({ name, password })
     await doc.save()
-    const { _id } = doc
+    const user = doc
+    const token = await tokenService.create(user, game)
     res.status(201).send({
-      data: [{ _id, name }]
+      data: [token]
     })
   } catch (e) {
     next(e)

@@ -87,7 +87,7 @@ class Home extends Component {
 
   componentDidMount() {
     this.getRandomKweens(this.props.user._id)
-    // this.addUpTheTens()
+    this.addUpTheTens()
   }
   render(){
     if (this.props.user && this.props.user.kweens.length > 3) {
@@ -96,7 +96,7 @@ class Home extends Component {
           <h2>Please select your three queens</h2>
           <form onSubmit={this.handleSubmit}>
             <FormGroup>
-              {this.props.kweens.map(kween =>
+              {this.props.user.kweens.map(kween =>
                 <FormControlLabel
                   control={
                     <Checkbox

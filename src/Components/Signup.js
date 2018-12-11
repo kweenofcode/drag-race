@@ -44,10 +44,10 @@ class Signup extends Component {
   }
   handleSubmit = async (e) => {
     e.preventDefault()
-    const { name, password } = this.state
-    const { data: { data } } = await axios.post('/signup', { name, password })
+    const { name, password, game } = this.state
+    const { data: { data } } = await axios.post('/signup', { name, password, game })
     const user = data[0]
-    this.addUserToCurrentList(user)
+    await this.addUserToCurrentList(user)
     this.props.setUser(user)
   }
   componentDidMount() {

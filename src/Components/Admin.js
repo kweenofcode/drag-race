@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
+import UserList from '../Components/UserList'
+
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,7 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 class Admin extends Component {
   state = {
-    loggedIn: false,   
+    games: null,  
   }
   handleElimination = async(e, id) => {
     let eliminated;
@@ -25,20 +27,20 @@ class Admin extends Component {
     this.props.refresh('kweens')
   }
 
-  getUsers = async() => {
-    const { data: {data} } = await axios.get('/users')
-    const users = data
+  getGame = async() => {
+    const { data: {data} } = await axios.get('/game')
+    const games = data[0]
     this.setState({
-      users
+      games
     })
   }
   componentDidMount() {
-    this.getUsers()
+    this.getGame()
     this.props.refresh('kweens')
     this.props.refresh('rules')
   }
   render() {
-    if (!this.state.loggedIn) {
+    if (this.state.games) {
       return (
         <div className="modal">
           <Link to="/">
@@ -78,19 +80,22 @@ class Admin extends Component {
             <div>
               <h2>Users</h2>
               <List>
-                {this.state.users.map((user) =>
+                {this.state.games.map((game) =>
+                  <div>
                   <ListItem 
-                    key={user._id} 
-                    id={user._id}>
+                    key={game._id} 
+                    id={game._id}>
                     <ListItemText 
-                      primary={user.name} 
-                      secondary={user._id} 
+                      primary={game.name} 
+                      secondary={game._id} 
                     />
                     <Button 
-                      onClick={() => this.props.delete('users', user._id)}>
+                      onClick={() => this.props.delete('game', game._id)}>
                       Remove
                     </Button>
-                  </ListItem>)}
+                  </ListItem>
+                  <UserList users={game.users}/>
+                  </div>)}
               </List>
             </div>
           </div>
@@ -116,9 +121,6 @@ class Admin extends Component {
             <Link to="/kweens/add">
               <Button>Add Queen</Button>
             </Link>
-            <Link to="/users/add">
-              <Button>Add User</Button>
-            </Link>
             <Link to="/rules/add">
               <Button>Add Rule</Button>
             </Link>
@@ -127,7 +129,7 @@ class Admin extends Component {
       )
     }
     return (
-      <div>Logged In</div>
+      <div>Loading</div>
     )
   }
 }
