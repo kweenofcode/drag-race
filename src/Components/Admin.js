@@ -25,8 +25,15 @@ class Admin extends Component {
     this.props.refresh('kweens')
   }
 
+  getUsers = async() => {
+    const { data: {data} } = await axios.get('/users')
+    const users = data
+    this.setState({
+      users
+    })
+  }
   componentDidMount() {
-    this.props.refresh('users')
+    this.getUsers()
     this.props.refresh('kweens')
     this.props.refresh('rules')
   }
@@ -71,7 +78,7 @@ class Admin extends Component {
             <div>
               <h2>Users</h2>
               <List>
-                {this.props.users.map((user) =>
+                {this.state.users.map((user) =>
                   <ListItem 
                     key={user._id} 
                     id={user._id}>

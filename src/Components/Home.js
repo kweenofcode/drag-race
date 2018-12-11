@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios';
 
 import ItemList from '../Components/ItemList'
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button'
 
 class Home extends Component {
   state = {
     users: null,
+    noSubmit: true,
+    user: null,
+    kweens: [], 
   }
   addUpTheTens = () => {
     const users = this.props.users
@@ -28,12 +36,89 @@ class Home extends Component {
       users
     })
   }
+  handleSubmit = async (e) => {
+    e.preventDefault()
+    const { _id } = this.props.user
+    const { kweens } = this.state
+    await axios.put(`/users/${_id}/kweens`, { kweens })
+  }
+
+  getRandomKweens = async (id) => {
+    if (this.props.user.kweens.length === 0) {
+      const kweens = []
+      const allKweens = this.props.kweens
+      for (let i = 0; i <= 4; i = i + 1) {
+        const randomIndex = Math.floor(Math.random() * allKweens.length)
+        kweens.push(allKweens[randomIndex]._id)
+        allKweens.splice(randomIndex, 1)
+      }
+      await axios.put(`/users/${id}/kweens`, { kweens })
+    }
+  }
+
+  disableCheckboxes = (length) => {
+    const checkboxes = [...document.querySelectorAll('input[type="checkbox"]')]
+    if (length >= 3) {
+      checkboxes.map(checkbox => checkbox.checked ? '' : checkbox.disabled = true)
+      this.setState({
+        noSubmit: false,
+      })
+    } else {
+      checkboxes.map(checkbox => checkbox.disabled = false)
+      this.setState({
+        noSubmit: true,
+      })
+    }
+  }
+
+  handleChange = (e) => {
+    const kweens = this.state.kweens
+    if (e.target.checked) {
+      kweens.push(e.target.value)
+    } else {
+      const index = kweens.indexOf(e.target.value)
+      kweens.splice(index, 1)
+    }
+    this.disableCheckboxes(kweens.length)
+    this.setState({
+      kweens
+    })
+  }
+
   componentDidMount() {
-    this.addUpTheTens()
-    this.props.refresh('kweens')
-    this.props.refresh('users')
+    this.getRandomKweens(this.props.user._id)
+    // this.addUpTheTens()
   }
   render(){
+    if (this.props.user && this.props.user.kweens.length > 3) {
+      return (
+        <div>
+          <h2>Please select your three queens</h2>
+          <form onSubmit={this.handleSubmit}>
+            <FormGroup>
+              {this.props.kweens.map(kween =>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value={kween._id}
+                      onChange={this.handleChange}
+                    />
+                  }
+                  label={kween.name}
+                  key={kween._id}
+                />)}
+            </FormGroup>
+            <Button
+              type="submit"
+              id="submit-btn"
+              disabled={this.state.noSubmit}
+            >
+              Add User
+          </Button>
+          </form>
+        </div>
+      )
+    }
     return (
       <div>
         <Link to="/admin">Admin</Link>

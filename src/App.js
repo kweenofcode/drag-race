@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { 
+  BrowserRouter as Router, 
+  Route, 
+  Link, 
+  Switch, 
+  Redirect 
+} from 'react-router-dom'
 import axios from 'axios';
+
+import {getToken} from './services/tokenService'
 
 import Home from './Components/Home'
 import Admin from './Components/Admin'
@@ -12,12 +20,35 @@ import User from './Components/User'
 import AddPoints from './Components/AddPoints'
 import Kween from './Components/Kween'
 import Login from './Components/Login'
+import Join from './Components/Join'
+import Signup from './Components/Signup'
 
 class App extends Component {
   state = {
+    game: null,
     kweens: null,
-    users: null, 
     rules: null,
+    user: null,
+  }
+
+  getCurrentUser = async() => {
+    const token = getToken()
+    if (token) {
+      try {
+        const res = await axios.get('/users/current', {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        })
+        const { user , game } = res.data.data[0]
+        this.setState({
+          user, 
+          game
+        })
+      } catch(e) {
+        console.log(e)
+      }
+    }
   }
 
   refresh = async(collection) => {
@@ -30,7 +61,16 @@ class App extends Component {
       console.log(e)
     }
   }
-
+  setGame = game => {
+    this.setState({
+      game,
+    })
+  }
+  setUser = user => {
+    this.setState({
+      user
+    })
+  }
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -48,76 +88,100 @@ class App extends Component {
 
   componentDidMount() {
     this.refresh('kweens')
-    this.refresh('users')
     this.refresh('rules')
+    this.refresh('users')
   }
   render() {
-    if (this.state.kweens && this.state.users && this.state.rules) {
       return (
         <Router>
           <div> 
-            <Route exact path="/" render={(props) => 
-              <Home 
-                {...props} 
+            <Route exact path="/" render={() => (
+              this.state.user ? 
+              <Home
                 refresh={this.refresh}
                 users={this.state.users}
                 kweens={this.state.kweens}
-                rules={this.state.rules}  
-              />}
+                rules={this.state.rules}
+                user={this.state.user}
+              /> 
+              :
+              <Redirect to="/join" />
+              )}
               />
-            <Route path="/admin" render={(props) => 
+            <Route path="/admin" render={(props) => (
+              this.state.user && this.state.user.admin ?
               <Admin 
                 {...props} 
                 refresh={this.refresh} 
-                users={this.state.users} 
                 kweens={this.state.kweens} 
                 rules={this.state.rules} 
-                delete={this.delete}/>} 
-                handleChange={this.handleChange}/>
+                delete={this.delete} 
+                handleChange={this.handleChange}
+              /> 
+              : 
+              <Redirect to="/" />
+            )}
+            />
             <Switch>
               <Route 
                 path="/users/:user_id" 
-                render={(props) => 
+                render={(props) => (
+                  this.state.user 
+                  ?
                   <User 
                     {...props} 
                     users={this.state.users} 
                     kweens={this.state.kweens} 
                     refresh={this.props.refresh} 
                   />
-                } 
+                  :
+                  <Redirect to="/join" />
+                )} 
               />
               <Route 
                 path="/users/add" 
-                render={(props) => 
+                render={(props) => (
+                  this.state.user && this.state.user.admin 
+                  ? 
                   <AddUser 
                     {...props} 
                     refresh={this.props.refresh} 
                     handleChange={this.props.handleChange} 
                   />
-                } 
+                  :
+                  <Redirect to="/" />
+                )} 
               />
             </Switch>
             <Switch>
               <Route 
                 path="/kweens/add" 
-                render={(props) => 
+                render={(props) => (
+                  this.state.user && this.state.user.admin 
+                  ?
                   <AddKween 
                     {...props} 
                     refresh={this.props.refresh} 
                     handleChange={this.props.handleChange} 
                   />
-                }
+                  :
+                  <Redirect to="/" />
+                )}
               />
               <Route 
                 path="/kweens/:kween_id/rules" 
-                render={(props) => 
+                render={(props) => (
+                  this.state.user && this.state.user.admin 
+                  ?
                   <AddPoints 
                     {...props} 
                     kweens={this.state.kweens}
                     rules={this.state.rules}
                     refresh={this.props.refresh}
                   />
-                } 
+                  :
+                  <Redirect to="/" />
+                )} 
               />
               <Route 
                 path="/kweens/:kween_id" 
@@ -131,30 +195,64 @@ class App extends Component {
             </Switch>
             <Route 
               path="/rules/add" 
-              render={(props) => 
+              render={(props) => (
+                this.state.user && this.state.user.admin 
+                ?
                 <AddRule 
                   {...props} 
                   refresh={this.props.refresh} 
                   handleChange={this.props.handleChange} 
                 />
-              } 
+                :
+                <Redirect to="/" />
+              )} 
             />
             <Route 
               path="/login"
-              render={(props) => 
-                <Login {...props} />
-              }
+              render={(props) => (
+                !this.state.user && this.state.game
+                ?
+                <Login 
+                  {...props}
+                  setUser={this.setUser}
+                  game={this.state.game}
+                  getCurrentUser={this.getCurrentUser}
+                />
+                :
+                <Redirect to="/" />
+              )}
             />
+            <Route 
+              path="/join"
+              render={(props) => (
+                !this.state.game 
+                ?
+                <Join {...props} 
+                  setGame={this.setGame}
+                  getCurrentUser={this.getCurrentUser}
+                />
+                : 
+                <Redirect to="/signup" />
+              )}/>
+              <Route 
+                path="/signup"
+                render={(props) => (
+                  !this.state.user && this.state.game
+                  ?
+                  <Signup 
+                    setUser={this.setUser}
+                    game={this.state.game}
+                    getCurrentUser={this.getCurrentUser}
+                  />
+                  :
+                  <Redirect to="/" />
+                )}
+                />
           </div>
         </Router>
       )
     }
-    return (
-      <div className="App">
-
-      </div>
-    );
   }
-}
+
 
 export default App;

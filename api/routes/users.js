@@ -2,6 +2,10 @@ const express = require('express')
 const Router = express.Router
 const router = Router()
 
+const auth = require('../middleware/auth')
+const user = require('../middleware/user')
+const game = require('../middleware/game')
+
 const User = require('../models/User')
 
 router.get('/', async (req, res, next) => {
@@ -15,21 +19,21 @@ router.get('/', async (req, res, next) => {
     }
   })
 
-router.post('/', async(req, res, next) => {
+router.get('/current', auth, user, game, async (req, res, next) => {
   try {
-    const { name, password } = req.body;
-    const doc = new User({ name, password })
-    await doc.save()
-    const { _id } = doc
-    res.status(201).send({
-      data: [{ _id, name}]
+    const { user, game } = req
+    res.status(200).send({
+      data:[{
+        user, 
+        game
+      }]
     })
-  } catch(e) {
+  } catch (e) {
     next(e)
   }
 })
 
-router.put('/:user_id', async(req, res, next) => {
+router.put('/:user_id/kweens', async(req, res, next) => {
   try {
     const { kweens } = req.body
     const {user_id} = req.params

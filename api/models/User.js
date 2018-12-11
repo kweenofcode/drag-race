@@ -8,10 +8,6 @@ const userSchema = new Schema({
     required: true,
   },
   kweens: [{ type: Schema.Types.ObjectId, ref: 'Kween' } ],
-  score: {
-    type: Number,
-    default: 0,
-  },
   admin: {
     type: Boolean,
     default: false,
