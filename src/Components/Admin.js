@@ -91,7 +91,11 @@ class Admin extends Component {
                       Remove
                     </Button>
                     <h4>Players</h4>
-                  <UserList users={game.users}/>
+                  <UserList 
+                    users={game.users} 
+                    delete={this.props.delete}
+                    getGames={this.getGames}
+                  />
                   </div>)}
               </List>
             </div>
