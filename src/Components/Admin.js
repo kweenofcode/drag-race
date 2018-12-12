@@ -27,17 +27,19 @@ class Admin extends Component {
     this.props.refresh('kweens')
   }
 
-  getGame = async() => {
+  getGames = async() => {
     const { data: {data} } = await axios.get('/game')
     const games = data[0]
     this.setState({
       games
     })
   }
+  deleteGame = async (collection, id) => {
+    await this.props.delete(collection, id)
+    this.getGames()
+  }
   componentDidMount() {
-    this.getGame()
-    this.props.refresh('kweens')
-    this.props.refresh('rules')
+    this.getGames()
   }
   render() {
     if (this.state.games) {
@@ -71,29 +73,24 @@ class Admin extends Component {
                       key={kween._id}
                     />
                     <Button 
-                      onClick={() => this.props.delete('kweens', kween._id)}>
+                      onClick={() => this.props.delete('kweens', kween._id)  }>
                       Remove
                     </Button>
                   </ListItem>)}
               </List>
             </div>
             <div>
-              <h2>Users</h2>
+              <h2>Games</h2>
               <List>
                 {this.state.games.map((game) =>
                   <div>
-                  <ListItem 
-                    key={game._id} 
-                    id={game._id}>
-                    <ListItemText 
-                      primary={game.name} 
-                      secondary={game._id} 
-                    />
+                    <h3>{game.name}</h3>
                     <Button 
-                      onClick={() => this.props.delete('game', game._id)}>
+                      onClick={() => this.deleteGame('game', game._id)
+                    }>
                       Remove
                     </Button>
-                  </ListItem>
+                    <h4>Players</h4>
                   <UserList users={game.users}/>
                   </div>)}
               </List>
@@ -120,6 +117,9 @@ class Admin extends Component {
           <div className="navigation">
             <Link to="/kweens/add">
               <Button>Add Queen</Button>
+            </Link>
+            <Link to="/game/add">
+              <Button>Add Game</Button>
             </Link>
             <Link to="/rules/add">
               <Button>Add Rule</Button>

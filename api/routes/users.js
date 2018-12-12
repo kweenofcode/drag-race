@@ -36,7 +36,7 @@ router.get('/current', auth, user, game, async (req, res, next) => {
 router.put('/:user_id/kweens', async(req, res, next) => {
   try {
     const { kweens } = req.body
-    const {user_id} = req.params
+    const { user_id } = req.params
     const doc = await User.findByIdAndUpdate(user_id, { kweens } )
     res.status(200).send({
       data: [doc]

@@ -1,12 +1,8 @@
 import React, {Component} from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
-import { Link } from 'react-router-dom'
 
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -19,11 +15,13 @@ class Kween extends Component {
 
   setKween = async () => {
     const { kween_id } = this.props.match.params
-    const kween = this.props.kweens.filter(kween => kween._id === kween_id)
+    console.log(kween_id)
+    const { data } = await axios.get(`/kweens/${kween_id}`)
+    const kween = data.data[0]
     this.setState({
-      kween: kween[0]
+      kween
     })
-    this.addUpTheTens(kween[0])
+    this.addUpTheTens(kween)
   }
 
   addUpTheTens = (kween) => {

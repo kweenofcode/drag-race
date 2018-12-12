@@ -4,7 +4,7 @@ import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
-class AddUser extends Component {
+class AddGame extends Component {
   state = {
     name: ''
   }
@@ -15,11 +15,11 @@ class AddUser extends Component {
   }
   handleSubmit = async (e) => {
     e.preventDefault()
-    const { name } = this.state
-    console.log(name)
-    await axios.post('/users', { name })
+    const { name, password } = this.state
+    await axios.post('/game', { name, password })
     this.setState({
-      name: ''
+      name: '',
+      password: '',
     })
     this.props.history.push('/admin')
   }
@@ -34,6 +34,13 @@ class AddUser extends Component {
             value={this.state.name}
             onChange={this.handleChange}
           />
+          <TextField
+            type="password"
+            name="password"
+            label="Password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
           <Button
             type="submit"
           >
@@ -45,4 +52,4 @@ class AddUser extends Component {
   }
 }
 
-export default AddUser
+export default AddGame

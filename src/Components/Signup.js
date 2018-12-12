@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
+import { setToken } from '../services/tokenService'
+
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
@@ -46,9 +49,17 @@ class Signup extends Component {
     e.preventDefault()
     const { name, password, game } = this.state
     const { data: { data } } = await axios.post('/signup', { name, password, game })
-    const user = data[0]
+    console.log(data)
+    const token = data[0]
+    const res = await axios.get('/users/current', {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    })
+    const { user } = res.data.data[0]
     await this.addUserToCurrentList(user)
-    this.props.setUser(user)
+    setToken(token)
+    this.props.getCurrentUser()
   }
   componentDidMount() {
     this.props.getCurrentUser()

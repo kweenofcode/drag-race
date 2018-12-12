@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField'
 
 class AddRule extends Component {

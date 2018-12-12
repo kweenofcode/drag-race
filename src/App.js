@@ -3,7 +3,6 @@ import './App.css';
 import { 
   BrowserRouter as Router, 
   Route, 
-  Link, 
   Switch, 
   Redirect 
 } from 'react-router-dom'
@@ -14,7 +13,7 @@ import {getToken} from './services/tokenService'
 import Home from './Components/Home'
 import Admin from './Components/Admin'
 import AddKween from './Components/AddKween'
-import AddUser from './Components/AddUser'
+import AddGame from './Components/AddGame'
 import AddRule from './Components/AddRule'
 import User from './Components/User'
 import AddPoints from './Components/AddPoints'
@@ -31,6 +30,13 @@ class App extends Component {
     user: null,
   }
 
+  getGames = async () => {
+    const { data: { data } } = await axios.get('/game')
+    const games = data[0]
+    this.setState({
+      games
+    })
+  }
   getCurrentUser = async() => {
     const token = getToken()
     if (token) {
@@ -85,11 +91,9 @@ class App extends Component {
       console.log(e)
     }
   }
-
   componentDidMount() {
     this.refresh('kweens')
     this.refresh('rules')
-    this.refresh('users')
   }
   render() {
       return (
@@ -99,10 +103,11 @@ class App extends Component {
               this.state.user ? 
               <Home
                 refresh={this.refresh}
-                users={this.state.users}
+                users={this.state.game.users}
                 kweens={this.state.kweens}
                 rules={this.state.rules}
                 user={this.state.user}
+                getCurrentUser={this.getCurrentUser}
               /> 
               :
               <Redirect to="/join" />
@@ -112,6 +117,7 @@ class App extends Component {
               this.state.user && this.state.user.admin ?
               <Admin 
                 {...props} 
+                getGames={this.getGames}
                 refresh={this.refresh} 
                 kweens={this.state.kweens} 
                 rules={this.state.rules} 
@@ -139,11 +145,11 @@ class App extends Component {
                 )} 
               />
               <Route 
-                path="/users/add" 
+                path="/game/add" 
                 render={(props) => (
                   this.state.user && this.state.user.admin 
                   ? 
-                  <AddUser 
+                  <AddGame
                     {...props} 
                     refresh={this.props.refresh} 
                     handleChange={this.props.handleChange} 

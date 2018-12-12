@@ -7,11 +7,27 @@ const router = Router()
 const Kween = require('../models/Kween')
 
 router.get('/', async (req, res, next) => {
+  try {
     const docs = await Kween.find().populate('points')
     res.status(200).send({
       data: docs,
     })
-  });
+  } catch(e) {
+    next(e)
+  }
+});
+
+router.get('/:kween_id', async (req, res, next) => {
+  const { kween_id } = req.params
+  try {
+    const kween = await Kween.findById(kween_id).populate('points')
+    res.status(200).send({
+      data: [kween],
+    })
+  } catch(e) {
+    next(e)
+  }
+});
 
 router.post('/', async(req, res, next) => {
   const { name } = req.body

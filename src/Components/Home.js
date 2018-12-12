@@ -5,8 +5,6 @@ import axios from 'axios';
 import ItemList from '../Components/ItemList'
 
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -14,7 +12,6 @@ import Button from '@material-ui/core/Button'
 
 class Home extends Component {
   state = {
-    users: null,
     noSubmit: true,
     user: null,
     kweens: [], 
@@ -41,6 +38,8 @@ class Home extends Component {
     const { _id } = this.props.user
     const { kweens } = this.state
     await axios.put(`/users/${_id}/kweens`, { kweens })
+    await this.props.getCurrentUser()
+    this.addUpTheTens()
   }
 
   getRandomKweens = async (id) => {
@@ -53,6 +52,7 @@ class Home extends Component {
         allKweens.splice(randomIndex, 1)
       }
       await axios.put(`/users/${id}/kweens`, { kweens })
+      this.props.getCurrentUser()
     }
   }
 
@@ -85,8 +85,9 @@ class Home extends Component {
     })
   }
 
-  componentDidMount() {
-    this.getRandomKweens(this.props.user._id)
+  async componentDidMount() {
+    await this.props.getCurrentUser()
+    await this.getRandomKweens(this.props.user._id)
     this.addUpTheTens()
   }
   render(){

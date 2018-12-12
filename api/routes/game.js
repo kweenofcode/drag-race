@@ -59,5 +59,16 @@ router.put('/:game_id/player', async(req, res, next) => {
   }
 })
 
+router.delete('/:game_id', async(req, res, next) => {
+  const { game_id } = req.params
+  try {
+    const doc = await Game.findByIdAndRemove(game_id)
+    res.status(201).send({
+      data: [doc]
+    })
+  } catch (e) {
+    next(e)
+  }
+})
 
 module.exports = router
