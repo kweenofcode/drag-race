@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import moment from 'moment';
 
 import UserList from '../Components/UserList'
 
@@ -42,6 +43,11 @@ class Admin extends Component {
     this.getGames()
   }
   render() {
+    if (!this.props.user.admin) {
+      return (
+        <h1>Sorry, Henny. You aren't authorized to see this page.</h1>
+      )
+    }
     if (this.state.games) {
       return (
         <div className="modal">

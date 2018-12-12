@@ -10,17 +10,18 @@ class ItemList extends Component {
       <div>
       {this.props.kweens.map(kween => (
         <ListItem
+          className="list-item"
           id={kween._id}
           key={kween._id} 
           data-eliminated={kween.eliminated}
         >
-            <ListItemText 
-              primary={kween.name}
-            />
-            <p>{kween.score}</p>
             <Link to={`/kweens/${kween._id}`}>
-              ScoreCard
+              <ListItemText 
+                primary={kween.name}
+              />
             </Link>
+            
+          <p>{kween.score}</p>
         </ListItem>
       ))}
       </div>      

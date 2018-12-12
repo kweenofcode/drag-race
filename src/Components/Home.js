@@ -9,6 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button'
+import { ListItem } from '@material-ui/core';
 
 class Home extends Component {
   state = {
@@ -93,8 +94,8 @@ class Home extends Component {
   render(){
     if (this.props.user && this.props.user.kweens.length > 3) {
       return (
-        <div>
-          <h2>Please select your three queens</h2>
+        <div className="modal modal--small">
+          <h2>Pick Your Queens</h2>
           <form onSubmit={this.handleSubmit}>
             <FormGroup>
               {this.props.user.kweens.map(kween =>
@@ -113,26 +114,29 @@ class Home extends Component {
               type="submit"
               id="submit-btn"
               disabled={this.state.noSubmit}
+              className="btn"
             >
-              Add User
+              Pick Queens
           </Button>
           </form>
         </div>
       )
     }
     return (
-      <div>
-        <Link to="/admin">Admin</Link>
-        <h1>Home</h1>
-        <List>
+      <div className="modal">
+        <Link className="btn admin-btn" to="/admin">Admin</Link>
+        <h1>Leader Board</h1>
+        <List className="tile"> 
           {this.props.users
             .filter(user => user.kweens.length === 3)
-            .map((user) => ( 
-              <div>
-                <h1 key={user._id} id={user._id}> {user.name} </h1>
+            .sort((a, b) => a.score > b.score)
+            .map((user, i) => ( 
+              <ListItem className="column">
+                <p>{i + 1}</p>
+                <h2 key={user._id} id={user._id}> {user.name} </h2>
                 <ItemList kweens={user.kweens}/>
                 <h3>Score: {user.score}</h3>
-              </div>
+              </ListItem>
             ))}
         </List>
       </div>

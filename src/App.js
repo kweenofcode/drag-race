@@ -114,7 +114,7 @@ class App extends Component {
               )}
               />
             <Route path="/admin" render={(props) => (
-              this.state.user && this.state.user.admin ?
+              this.state.user ?
               <Admin 
                 {...props} 
                 getGames={this.getGames}
@@ -122,6 +122,7 @@ class App extends Component {
                 kweens={this.state.kweens} 
                 rules={this.state.rules} 
                 delete={this.delete} 
+                user={this.state.user}
                 handleChange={this.handleChange}
               /> 
               : 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import moment from 'moment'
 
 import { setToken } from '../services/tokenService'
 
@@ -69,6 +70,14 @@ class Signup extends Component {
     })
   }
   render() {
+    if (moment().isAfter(moment('2018-12-15'))) {
+      return (
+        <div>
+          <h1>Sorry henny, the game race has already begun</h1>
+          <Link to="/login">Already a user?</Link>
+        </div>
+      )
+    }
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
