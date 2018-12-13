@@ -26,6 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "nodemon ./index.js --ignore src/",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "seed": "node api/seeds/index.js",
     "heroku-postbuild": "cd src && npm install --only=dev && npm install && npm run build"
   },
