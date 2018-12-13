@@ -28,6 +28,7 @@ class App extends Component {
     kweens: null,
     rules: null,
     user: null,
+    loading: true,
   }
 
   getGames = async () => {
@@ -49,12 +50,16 @@ class App extends Component {
         const { user , game } = res.data.data[0]
         this.setState({
           user, 
-          game
+          game,
         })
+        return
       } catch(e) {
         console.log(e)
       }
     }
+    this.setState({
+      loading: false,
+    })
   }
 
   refresh = async(collection) => {
@@ -108,6 +113,8 @@ class App extends Component {
                 rules={this.state.rules}
                 user={this.state.user}
                 getCurrentUser={this.getCurrentUser}
+                setUser={this.setUser}
+                setGame={this.setGame}
               /> 
               :
               <Redirect to="/join" />
@@ -237,6 +244,7 @@ class App extends Component {
                 <Join {...props} 
                   setGame={this.setGame}
                   getCurrentUser={this.getCurrentUser}
+                  loading={this.state.loading}
                 />
                 : 
                 <Redirect to="/signup" />

@@ -5,20 +5,25 @@ import axios from 'axios';
 import ItemList from '../Components/ItemList'
 
 import List from '@material-ui/core/List';
+import ListItemText from '@material-ui/core/ListItemText';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button'
 import { ListItem } from '@material-ui/core';
+import { removeToken } from '../services/tokenService';
+import AdminBtn from '../Components/AdminBtn'
+import Admin from './Admin';
 
 class Home extends Component {
   state = {
     noSubmit: true,
     user: null,
     kweens: [], 
+    popUp: 'hide',
   }
   addUpTheTens = () => {
-    const users = this.props.users
+    let { users } = this.props
     users.map((user) => {
       user.score = 0
       user.kweens.forEach((kween) => {
@@ -86,6 +91,20 @@ class Home extends Component {
     })
   }
 
+  logout = () => {
+    removeToken()
+    this.props.setGame(null)
+    this.props.setUser(null)
+  }
+
+  toggleModal = () => {
+    let { popUp } = this.state
+    popUp === 'hide' ? popUp = 'pop-up': popUp = 'hide'
+    this.setState({
+      popUp
+    })
+  }
+
   async componentDidMount() {
     await this.props.getCurrentUser()
     await this.getRandomKweens(this.props.user._id)
@@ -124,14 +143,14 @@ class Home extends Component {
     }
     return (
       <div className="modal">
-        <Link className="btn admin-btn" to="/admin">Admin</Link>
+        <AdminBtn />
         <h1>Leader Board</h1>
         <List className="tile"> 
           {this.props.users
             .filter(user => user.kweens.length === 3)
-            .sort((a, b) => a.score > b.score)
+            .sort((a, b) => b.score - a.score)
             .map((user, i) => ( 
-              <ListItem className="column">
+              <ListItem key={i} className="column">
                 <p>{i + 1}</p>
                 <h2 key={user._id} id={user._id}> {user.name} </h2>
                 <ItemList kweens={user.kweens}/>
@@ -139,6 +158,40 @@ class Home extends Component {
               </ListItem>
             ))}
         </List>
+        <div className="btn--rules btn">
+          <Button
+            onClick={this.toggleModal}
+          >
+            See the Rules
+          </Button>
+        </div>
+        <div className={this.state.popUp}>
+          <div>
+            <Button 
+              className="btn--close btn"
+              onClick={this.toggleModal}
+            >
+              X
+          </Button>
+            <h2>Rules</h2>
+            <p>The following rules are currently in place</p>
+              <List>
+              {this.props.rules.map((rule) =>
+                <ListItem
+                  key={rule._id}
+                  id={rule._id}>
+                  <ListItemText
+                    primary={rule.body}
+                    secondary={rule.description}
+                  />
+                  <span>{rule.points} points</span>
+                </ListItem>)}
+              </List>
+          </div>
+        </div>
+        <div>
+        <Button onClick={this.logout}> Logout </Button>
+        </div>
       </div>
     )
   }

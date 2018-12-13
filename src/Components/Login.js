@@ -38,13 +38,16 @@ class Login extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="modal modal--small">
+        <h1>Already playing? Sign-in below.</h1>
         <form onSubmit={this.handleSubmit}>
           <TextField
             name="name"
             label="User's Name"
             value={this.state.name}
             onChange={this.handleChange}
+            className="text-input"
+            required={true}
           />
           <TextField
             type="password"
@@ -52,11 +55,13 @@ class Login extends Component {
             label="User's Password"
             value={this.state.password}
             onChange={this.handleChange}
+            className="text-input"
+            required={true}
           />
           <Button
             type="submit"
           >
-            Add User
+            Sign In
           </Button>
         </form>
       </div>

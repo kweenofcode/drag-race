@@ -2,11 +2,12 @@ import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button'
 
+import AdminBtn from './AdminBtn'
 
 class Kween extends Component {
   state = {
@@ -41,8 +42,13 @@ class Kween extends Component {
   render() {
     if (this.state.kween) {
       return (
-        <div>
-          <Link to="/">Home</Link>
+        <div className="modal">
+          <Link to="/" className="btn btn--rules">
+            <Button>
+              Home
+            </Button>
+          </Link>
+          <AdminBtn />
           <h1>{this.state.kween.name}</h1>
           <List>
             {this.state.kween.points.map(point => 

@@ -31,7 +31,7 @@ class AddRule extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="modal modal--small">
         <h2>Add A New Rule</h2>
         <form onSubmit={this.handleSubmit}>
           <TextField
@@ -39,12 +39,14 @@ class AddRule extends Component {
             label="Title"
             value={this.state.body}
             onChange={this.handleChange}
+            className="text-input"
           />
           <TextField
             name="description"
             label="Description"
             value={this.state.description}
             onChange={this.handleChange}
+            className="text-input"
           />
           <TextField
             name="points"
@@ -52,10 +54,12 @@ class AddRule extends Component {
             label="Points"
             value={this.state.points}
             onChange={this.handleChange}
+            className="text-input"
           />
           <TextField 
             type="submit"  
             value="Add Rule"
+            className="btn--full"
           />
         </form>
       </div>

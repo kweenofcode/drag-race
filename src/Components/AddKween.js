@@ -25,7 +25,7 @@ class Form extends Component {
   }
   render() {
     return (
-      <>
+      <div className="modal modal--small">
         <h2>Add Queen</h2>
         <form onSubmit={this.handleSubmit}>
           <TextField
@@ -33,6 +33,8 @@ class Form extends Component {
             label="Queen's Name"
             value={this.state.name}
             onChange={this.handleChange}
+            className="text-input"
+            required={true}
           />
           <Button
             type="submit"
@@ -40,7 +42,7 @@ class Form extends Component {
           Add Queen
           </Button>
         </form>
-      </>
+      </div>
     )
   }
 }

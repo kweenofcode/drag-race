@@ -50,7 +50,6 @@ class Signup extends Component {
     e.preventDefault()
     const { name, password, game } = this.state
     const { data: { data } } = await axios.post('/signup', { name, password, game })
-    console.log(data)
     const token = data[0]
     const res = await axios.get('/users/current', {
       headers: {
@@ -79,19 +78,21 @@ class Signup extends Component {
       )
     }
     return (
-      <div>
+      <div className="modal modal--small">
+        <h1>Ready to join the race?</h1>
         <form onSubmit={this.handleSubmit}>
           <TextField
             name="name"
-            label="User's Name"
+            label="Your Name"
             value={this.state.name}
             onChange={this.handleChange}
             required={true}
+            className="text-input"
           />
           <TextField
             type="password"
             name="password"
-            label="User's Password"
+            label="Choose a password"
             value={this.state.password}
             onChange={this.handleChange}
             required={true}
@@ -100,10 +101,10 @@ class Signup extends Component {
             type="submit"
             disabled={this.state.disable}
           >
-            Add User
+            Join the Race
           </Button>
         </form>
-        <Link to="/login">Already a user?</Link>
+        <p>Already Playing? <Link to="/login">Signin</Link></p>
       </div>
     )
   }

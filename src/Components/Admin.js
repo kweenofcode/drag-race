@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import moment from 'moment';
 
 import UserList from '../Components/UserList'
 
@@ -11,6 +10,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+
+import Unauthorized from './Unauthorized'
 
 class Admin extends Component {
   state = {
@@ -45,13 +46,13 @@ class Admin extends Component {
   render() {
     if (!this.props.user.admin) {
       return (
-        <h1>Sorry, Henny. You aren't authorized to see this page.</h1>
+        <Unauthorized />
       )
     }
     if (this.state.games) {
       return (
         <div className="modal">
-          <Link to="/">
+          <Link className="btn btn--rules" to="/">
             <Button>Home</Button>
           </Link>
           <div className="half"> 
@@ -139,7 +140,9 @@ class Admin extends Component {
       )
     }
     return (
-      <div>Loading</div>
+      <div className="modal modal--small">
+        <h1>Just putting on my face...</h1>
+      </div>
     )
   }
 }

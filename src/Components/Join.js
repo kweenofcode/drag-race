@@ -30,27 +30,42 @@ class Join extends Component {
     this.props.getCurrentUser()
   }
   render() {
+    if (this.props.loading) {
+      return (
+        <div className="modal modal--small">
+          <h1>Just putting my face on...</h1>
+        </div>
+      )
+    }
     return(
-      <form onSubmit={this.handleSubmit}>
-        <TextField
-          name="name"
-          label="Name of the Game"
-          value={this.state.name}
-          onChange={this.handleChange}
-        />
-        <TextField
-          type="password"
-          name="password"
-          label="Password"
-          value={this.state.password}
-          onChange={this.handleChange}
-        />
-        <Button
-          type="submit"
-        >
-          Join Game
-          </Button>
-      </form>
+      <div className="modal modal--small">
+        <h1>Oh, she came to play?</h1>
+        <p>please enter the name and password you were provided to continue</p>
+        <form onSubmit={this.handleSubmit}>
+          <TextField
+            name="name"
+            label="Name of the Game"
+            value={this.state.name}
+            onChange={this.handleChange}
+            required={true}
+            className="text-input"
+          />
+          <TextField
+            type="password"
+            name="password"
+            label="Password"
+            value={this.state.password}
+            onChange={this.handleChange}
+            required={true}
+            className="text-input"
+          />
+          <Button
+            type="submit"
+          >
+            Join Game
+            </Button>
+        </form>
+      </div>
     )
   }
 }

@@ -4,6 +4,8 @@ import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
+import Unauthorized from '../Components/Unauthorized'
+
 class AddGame extends Component {
   state = {
     name: ''
@@ -24,30 +26,37 @@ class AddGame extends Component {
     this.props.history.push('/admin')
   }
   render() {
+    if (this.props.user.admin) {
+      return (
+        <div className="modal modal--small">
+          <h2>Add a New Game</h2>
+          <form onSubmit={this.handleSubmit}>
+            <TextField
+              name="name"
+              label="Name of the Game is:"
+              value={this.state.name}
+              onChange={this.handleChange}
+              className="text-input"
+            />
+            <TextField
+              type="password"
+              name="password"
+              label="Password"
+              value={this.state.password}
+              onChange={this.handleChange}
+              className="text-input"
+            />
+            <Button
+              type="submit"
+            >
+            Add Game
+            </Button>
+          </form>
+        </div>
+      )
+    }
     return (
-      <>
-        <h2>Add a New User</h2>
-        <form onSubmit={this.handleSubmit}>
-          <TextField
-            name="name"
-            label="User's Name"
-            value={this.state.name}
-            onChange={this.handleChange}
-          />
-          <TextField
-            type="password"
-            name="password"
-            label="Password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-          <Button
-            type="submit"
-          >
-          Add User
-          </Button>
-        </form>
-      </>
+      <Unauthorized />
     )
   }
 }
